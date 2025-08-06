@@ -49,7 +49,29 @@ func (s *SchedulerTestSuite) TestRunOneCycle() {
 
 	s.Len(s.bookingProvider.Bookings, 5)
 
-	// s.bookingProvider.Bookings[0].Start
+	for i := range s.bookingProvider.Bookings {
+		s.Equal(s.bookingProvider.Bookings[i].Start.Format("15:04:05"), "15:00:00")
+	}
+}
+
+func (s *SchedulerTestSuite) TestRunMultipleCycles() {
+	s.Len(s.bookingProvider.Bookings, 0)
+	s.bookingProvider.On("CanBookSlot", mock.Anything, mock.Anything).Return(true, nil)
+
+	err := s.scheduler.Run(s.T().Context())
+	s.NoError(err, "Expected no error during scheduler run")
+
+	s.Len(s.bookingProvider.Bookings, 5)
+
+	for i := range s.bookingProvider.Bookings {
+		s.Equal(s.bookingProvider.Bookings[i].Start.Format("15:04:05"), "15:00:00")
+	}
+
+	err = s.scheduler.Run(s.T().Context())
+
+	s.NoError(err, "Expected no error during scheduler run")
+	s.Len(s.bookingProvider.Bookings, 5)
+
 	for i := range s.bookingProvider.Bookings {
 		s.Equal(s.bookingProvider.Bookings[i].Start.Format("15:04:05"), "15:00:00")
 	}
@@ -66,7 +88,6 @@ func (s *SchedulerTestSuite) TestCanBookOnlyTwoDays() {
 
 	s.Len(s.bookingProvider.Bookings, 2)
 
-	// s.bookingProvider.Bookings[0].Start
 	for i := range s.bookingProvider.Bookings {
 		s.Equal(s.bookingProvider.Bookings[i].Start.Format("15:04:05"), "15:00:00")
 	}
