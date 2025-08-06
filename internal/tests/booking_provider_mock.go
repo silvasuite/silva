@@ -36,16 +36,19 @@ func (b *BookingProviderMock) ListAvailabeSlots(ctx context.Context, start, end 
 	return b.Slots, nil
 }
 
-func (b *BookingProviderMock) BookSlot(ctx context.Context, slotID string) error {
+func (b *BookingProviderMock) BookSlot(ctx context.Context, slotID string) (string, error) {
 	var err = trunk.ErrCannotBookEvent
+	bookingID := slotID + "_booking"
 	for i := range b.Slots {
 		if b.Slots[i].ID == slotID {
-			b.Bookings = append(b.Bookings, trunk.Booking(b.Slots[i]))
+			booking := trunk.Booking{Slot: b.Slots[i], SlotID: slotID}
+			booking.ID = bookingID
+			b.Bookings = append(b.Bookings, booking)
 		}
 		err = nil
 	}
 
-	return err
+	return bookingID, err
 
 }
 

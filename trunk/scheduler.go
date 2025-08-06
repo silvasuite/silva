@@ -74,7 +74,7 @@ func (s *Scheduler) Run(ctx context.Context) error {
 			}
 
 			if canBook {
-				err := s.Booking.BookSlot(ctx, slot.ID)
+				_, err := s.Booking.BookSlot(ctx, slot.ID)
 				if err != nil {
 					return err
 				}

@@ -14,7 +14,7 @@ var (
 // BookingProvider books a class/slot/event with an external service.
 type BookingProvider interface {
 	ListAvailabeSlots(ctx context.Context, start, end time.Time) ([]Slot, error)
-	BookSlot(ctx context.Context, slotID string) error
+	BookSlot(ctx context.Context, slotID string) (string, error)
 	CanBookSlot(ctx context.Context, slotID string) (bool, error)
 	CancelBooking(ctx context.Context, bookingID string) error
 	ListBookings(ctx context.Context) ([]Booking, error)

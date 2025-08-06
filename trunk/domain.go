@@ -16,9 +16,14 @@ func (e *Slot) Overlaps(other Slot) bool {
 }
 
 // Booking confirms a Slot for the user.
-type Booking Slot
+type Booking struct {
+	Slot
+	SlotID string // ID of the booked slot
+}
 
 type PreferredBookTime struct {
+	// given the preferred time, the maximum delay allowed
+	// before the slot is considered not bookable anymore.
 	maxDelay time.Duration
 	def      time.Time
 	byDay    map[time.Weekday]time.Time
