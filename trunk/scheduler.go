@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// Service orchestrates calendar reading, decision logic and booking.
-type Service struct {
+// Scheduler orchestrates calendar reading, decision logic and booking.
+type Scheduler struct {
 	Calendar      CalendarProvider
 	Booking       BookingProvider
 	PreferredTime PreferredBookTime
@@ -19,7 +19,7 @@ type Service struct {
 }
 
 // Run executes one scheduling cycle.
-func (s *Service) Run(ctx context.Context) error {
+func (s *Scheduler) Run(ctx context.Context) error {
 	if s.LookAhead == 0 {
 		s.LookAhead = 7 * 24 * time.Hour
 	}
@@ -56,7 +56,7 @@ func (s *Service) Run(ctx context.Context) error {
 		preferredTimeForDay := s.PreferredTime.GetPreferredBookTime(day)
 		maxPreferredTime := preferredTimeForDay.Add(s.PreferredTime.maxDelay)
 
-		// Simple hack: formatted are lexicographically ordered in the same way as time
+		// Simple hack: string-formatted hours are lexicographically ordered in the same way as time
 		slotTime := slot.Start.Format("15:04:05")
 		preferredTime := preferredTimeForDay.Format("15:04:05")
 		maxPreferredTimeStr := maxPreferredTime.Format("15:04:05")

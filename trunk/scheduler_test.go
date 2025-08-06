@@ -15,7 +15,7 @@ import (
 type SchedulerTestSuite struct {
 	suite.Suite
 
-	scheduler       *trunk.Service
+	scheduler       *trunk.Scheduler
 	bookingProvider *tests.BookingProviderMock
 }
 
@@ -31,7 +31,7 @@ func (s *SchedulerTestSuite) SetupTest() {
 
 	s.Len(s.bookingProvider.Slots, 50, "Expected 50 slots to be generated")
 
-	s.scheduler = &trunk.Service{
+	s.scheduler = &trunk.Scheduler{
 		Calendar:          nil, // Mock or real calendar provider can be set here
 		Booking:           s.bookingProvider,
 		PreferredTime:     trunk.NewPreferredBookTime(preferred, time.Hour, nil),
